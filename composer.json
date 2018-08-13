@@ -1,0 +1,29 @@
+{
+    "name": "hellofreshdevtests/cgonser-api-test",
+    "description": "Hello Fresh Dev Tests - Carlos Gonser API Test",
+    "type": "project",
+    "authors": [
+        {
+            "name": "cgonser",
+            "email": "carlos@gonser.com.br"
+        }
+    ],
+    "require": {
+        "ext-json": "*",
+        "symfony/dependency-injection": "^4.1",
+        "symfony/http-foundation": "^4.1",
+        "symfony/http-kernel": "^4.1",
+        "symfony/routing": "^4.1",
+        "symfony/yaml": "^4.1",
+        "symfony/config": "^4.1",
+        "doctrine/dbal": "^2.8",
+        "doctrine/migrations": "^1.8",
+        "ramsey/uuid-doctrine": "^1.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        },
+        "classmap": ["src"]
+    }
+}
