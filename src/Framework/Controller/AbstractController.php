@@ -12,7 +12,7 @@ class AbstractController
      *
      * @return JsonResponse
      */
-    protected function handleSuccess($responseData = null, int $httpCode = 200): JsonResponse
+    protected function handleSuccess($responseData = [], int $httpCode = 200): JsonResponse
     {
         return new JsonResponse($responseData, $httpCode);
     }

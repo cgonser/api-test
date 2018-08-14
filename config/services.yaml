@@ -1,4 +1,8 @@
 services:
-    App\Controller\RecipeController:
+    app.controller.recipe:
         class: App\Controller\RecipeController
+        arguments:
+            - '@app.service.recipe_manager'
 
+    app.service.recipe_manager:
+        class: App\Service\RecipeManager

@@ -1,42 +1,42 @@
 recipes_list:
     path: /recipes
-    controller: App\Controller\RecipeController::listAction
+    controller: 'app.controller.recipe::listAction'
     methods: [GET]
 
 recipes_create:
     path: /recipes
-    controller: App\Controller\RecipeController::createAction
+    controller: 'app.controller.recipe::createAction'
     methods: [POST]
 
 recipes_get:
     path: /recipes/{id}
-    controller: App\Controller\RecipeController::getAction
+    controller: 'app.controller.recipe::getAction'
     methods: [GET]
     requirements:
         id: '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}'
 
 recipes_update:
     path: /recipes/{id}
-    controller: App\Controller\RecipeController::updateAction
+    controller: 'app.controller.recipe::updateAction'
     methods: [PUT, PATCH]
     requirements:
         id: '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}'
 
 recipes_delete:
     path: /recipes/{id}
-    controller: App\Controller\RecipeController::deleteAction
+    controller: 'app.controller.recipe::deleteAction'
     methods: [DELETE]
     requirements:
         id: '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}'
 
 recipes_rate:
     path: /recipes/{id}/rating
-    controller: App\Controller\RecipeController::rateAction
+    controller: 'app.controller.recipe::rateAction'
     methods: [POST]
     requirements:
         id: '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}'
 
 recipes_search:
     path: /recipes/search
-    controller: App\Controller\RecipeController::searchAction
+    controller: 'app.controller.recipe::searchAction'
     methods: [POST]
