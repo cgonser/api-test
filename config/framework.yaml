@@ -1,53 +1,70 @@
 imports:
-    - { resource: 'parameters.yaml' }
-    - { resource: 'services.yaml' }
+- { resource: 'parameters.yaml' }
+- { resource: 'services.yaml' }
 
 parameters:
     routes.dir: '../config'
     routes.file: 'routes.yaml'
 
 services:
-    Symfony\Component\HttpKernel\HttpKernel:
+    kernel:
         class: Symfony\Component\HttpKernel\HttpKernel
         arguments:
-        - '@Symfony\Component\EventDispatcher\EventDispatcher'
-        - '@Symfony\Component\HttpKernel\Controller\ControllerResolver'
-        - '@Symfony\Component\HttpFoundation\RequestStack'
-        - '@Symfony\Component\HttpKernel\Controller\ArgumentResolver'
+        - '@kernel.event_dispatcher'
+        - '@kernel.controller.controller_resolver'
+        - '@http.request_stack'
+        - '@kernel.controller.argument_resolver'
 
-    Symfony\Component\HttpFoundation\RequestStack:
+    http.request_stack:
         class: Symfony\Component\HttpFoundation\RequestStack
 
-    Symfony\Component\EventDispatcher\EventDispatcher:
+    kernel.event_dispatcher:
         class: Symfony\Component\EventDispatcher\EventDispatcher
         calls:
         -   method: addSubscriber
             arguments:
-            - '@routes.listener'
+            - '@kernel.event_listener.routes_listener'
         -   method: addSubscriber
             arguments:
-            - '@Symfony\Component\HttpKernel\EventListener\ExceptionListener'
+            - '@kernel.event_listener.exception_listener'
+        -   method: addListener
+            arguments:
+            - "kernel.request"
+            - [ "@kernel.event_listener.json_request_transformer", "onKernelRequest" ]
 
-    Symfony\Component\HttpKernel\Controller\ArgumentResolver:
-        class: Symfony\Component\HttpKernel\Controller\ArgumentResolver
+    kernel.event_listener.routes_listener:
+        class: Symfony\Component\HttpKernel\EventListener\RouterListener
+        arguments:
+        - '@routes.router'
+        - '@http.request_stack'
 
-    Symfony\Component\HttpKernel\Controller\ControllerResolver:
-        class: Symfony\Component\HttpKernel\Controller\ControllerResolver
-
-    Symfony\Component\HttpKernel\EventListener\ExceptionListener:
+    kernel.event_listener.exception_listener:
         class: Symfony\Component\HttpKernel\EventListener\ExceptionListener
         arguments:
         - 'Framework\Controller\ErrorController::handleException'
 
-    routes.locator:
+    kernel.event_listener.json_request_transformer:
+        class: Qandidate\Common\Symfony\HttpKernel\EventListener\JsonRequestTransformerListener
+
+    kernel.controller.argument_resolver:
+        class: Symfony\Component\HttpKernel\Controller\ArgumentResolver
+
+    kernel.controller.controller_resolver:
+        class: Symfony\Component\HttpKernel\Controller\ContainerControllerResolver
+        arguments:
+            - '@service_container'
+
+    # routing
+
+    routes.file_locator:
         class: Symfony\Component\Config\FileLocator
         arguments:
         - '%routes.dir%'
 
-    routes.loader:
+    routes.yaml_loader:
         class: Symfony\Component\Routing\Loader\YamlFileLoader
         arguments:
-        - '@routes.locator'
+        - '@routes.file_locator'
 
     routes.request_context:
         class: Symfony\Component\Routing\RequestContext
@@ -55,16 +72,7 @@ services:
     routes.router:
         class: Symfony\Component\Routing\Router
         arguments:
-        - '@routes.loader'
+        - '@routes.yaml_loader'
         - '%routes.file%'
         - [ ]
         - '@routes.request_context'
-
-    routes.request_stack:
-        class: Symfony\Component\HttpFoundation\RequestStack
-
-    routes.listener:
-        class: Symfony\Component\HttpKernel\EventListener\RouterListener
-        arguments:
-        - '@routes.router'
-        - '@routes.request_stack'
