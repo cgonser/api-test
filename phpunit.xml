@@ -1,0 +1,7 @@
+<phpunit>
+    <testsuites>
+        <testsuite name="App Test Suite">
+            <directory>src/App/Tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

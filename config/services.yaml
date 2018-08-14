@@ -1,4 +1,4 @@
-imports:
-    - { resource: 'parameters.yaml' }
-    - { resource: 'framework.yaml' }
+services:
+    App\Controller\RecipeController:
+        class: App\Controller\RecipeController
 

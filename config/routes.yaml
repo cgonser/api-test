@@ -1,0 +1,42 @@
+recipes_list:
+    path: /recipes
+    controller: App\Controller\RecipeController::listAction
+    methods: [GET]
+
+recipes_create:
+    path: /recipes
+    controller: App\Controller\RecipeController::createAction
+    methods: [POST]
+
+recipes_get:
+    path: /recipes/{id}
+    controller: App\Controller\RecipeController::getAction
+    methods: [GET]
+    requirements:
+        id: '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}'
+
+recipes_update:
+    path: /recipes/{id}
+    controller: App\Controller\RecipeController::updateAction
+    methods: [PUT, PATCH]
+    requirements:
+        id: '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}'
+
+recipes_delete:
+    path: /recipes/{id}
+    controller: App\Controller\RecipeController::deleteAction
+    methods: [DELETE]
+    requirements:
+        id: '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}'
+
+recipes_rate:
+    path: /recipes/{id}/rating
+    controller: App\Controller\RecipeController::rateAction
+    methods: [POST]
+    requirements:
+        id: '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}'
+
+recipes_search:
+    path: /recipes/search
+    controller: App\Controller\RecipeController::searchAction
+    methods: [POST]

@@ -1,3 +1,7 @@
+imports:
+    - { resource: 'parameters.yaml' }
+    - { resource: 'services.yaml' }
+
 parameters:
     routes.dir: '../config'
     routes.file: 'routes.yaml'
@@ -6,10 +10,10 @@ services:
     Symfony\Component\HttpKernel\HttpKernel:
         class: Symfony\Component\HttpKernel\HttpKernel
         arguments:
-            - '@Symfony\Component\EventDispatcher\EventDispatcher'
-            - '@Symfony\Component\HttpKernel\Controller\ControllerResolver'
-            - '@Symfony\Component\HttpFoundation\RequestStack'
-            - '@Symfony\Component\HttpKernel\Controller\ArgumentResolver'
+        - '@Symfony\Component\EventDispatcher\EventDispatcher'
+        - '@Symfony\Component\HttpKernel\Controller\ControllerResolver'
+        - '@Symfony\Component\HttpFoundation\RequestStack'
+        - '@Symfony\Component\HttpKernel\Controller\ArgumentResolver'
 
     Symfony\Component\HttpFoundation\RequestStack:
         class: Symfony\Component\HttpFoundation\RequestStack
@@ -17,9 +21,12 @@ services:
     Symfony\Component\EventDispatcher\EventDispatcher:
         class: Symfony\Component\EventDispatcher\EventDispatcher
         calls:
-            - method: addSubscriber
-              arguments:
-              - '@routes.listener'
+        -   method: addSubscriber
+            arguments:
+            - '@routes.listener'
+        -   method: addSubscriber
+            arguments:
+            - '@Symfony\Component\HttpKernel\EventListener\ExceptionListener'
 
     Symfony\Component\HttpKernel\Controller\ArgumentResolver:
         class: Symfony\Component\HttpKernel\Controller\ArgumentResolver
@@ -27,15 +34,20 @@ services:
     Symfony\Component\HttpKernel\Controller\ControllerResolver:
         class: Symfony\Component\HttpKernel\Controller\ControllerResolver
 
+    Symfony\Component\HttpKernel\EventListener\ExceptionListener:
+        class: Symfony\Component\HttpKernel\EventListener\ExceptionListener
+        arguments:
+        - 'Framework\Controller\ErrorController::handleException'
+
     routes.locator:
         class: Symfony\Component\Config\FileLocator
         arguments:
-            - '%routes.dir%'
+        - '%routes.dir%'
 
     routes.loader:
         class: Symfony\Component\Routing\Loader\YamlFileLoader
         arguments:
-            - '@routes.locator'
+        - '@routes.locator'
 
     routes.request_context:
         class: Symfony\Component\Routing\RequestContext
@@ -43,10 +55,10 @@ services:
     routes.router:
         class: Symfony\Component\Routing\Router
         arguments:
-            - '@routes.loader'
-            - '%routes.file%'
-            - [ ]
-            - '@routes.request_context'
+        - '@routes.loader'
+        - '%routes.file%'
+        - [ ]
+        - '@routes.request_context'
 
     routes.request_stack:
         class: Symfony\Component\HttpFoundation\RequestStack
@@ -54,5 +66,5 @@ services:
     routes.listener:
         class: Symfony\Component\HttpKernel\EventListener\RouterListener
         arguments:
-            - '@routes.router'
-            - '@routes.request_stack'
+        - '@routes.router'
+        - '@routes.request_stack'
