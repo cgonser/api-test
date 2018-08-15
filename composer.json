@@ -20,7 +20,9 @@
         "doctrine/migrations": "^1.8",
         "ramsey/uuid-doctrine": "^1.5",
         "symfony/validator": "^4.1",
-        "qandidate/symfony-json-request-transformer": "^1.3"
+        "qandidate/symfony-json-request-transformer": "^1.3",
+        "predis/predis": "^1.1",
+        "symfony/security": "^4.1"
     },
     "autoload": {
         "psr-4": {

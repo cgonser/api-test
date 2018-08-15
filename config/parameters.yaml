@@ -1,2 +1,11 @@
 parameters:
+    env(DEBUG): false
     debug: '%env(DEBUG)%'
+    database.driver: pdo_pgsql
+    database.hostname: '%env(POSTGRESQL_HOSTNAME)%'
+    database.username: '%env(POSTGRESQL_USER)%'
+    database.password: '%env(POSTGRESQL_PASSWORD)%'
+    database.dbname: '%env(POSTGRESQL_DB)%'
+    database.port: '%env(POSTGRESQL_PORT)%'
+    redis.hostname: '%env(REDIS_HOSTNAME)%'
+    redis.port: '%env(REDIS_PORT)%'

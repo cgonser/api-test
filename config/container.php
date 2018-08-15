@@ -9,4 +9,6 @@ $containerBuilder = new ContainerBuilder();
 $loader = new YamlFileLoader($containerBuilder, new FileLocator(__DIR__));
 $loader->load('framework.yaml');
 
+$containerBuilder->compile(true);
+
 return $containerBuilder;

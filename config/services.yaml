@@ -1,8 +1,22 @@
 services:
     app.controller.recipe:
+        public: true
         class: App\Controller\RecipeController
         arguments:
             - '@app.service.recipe_manager'
 
+    app.service.recipe_search.query_builder:
+        class: App\Service\RecipeSearch\QueryBuilder
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
     app.service.recipe_manager:
         class: App\Service\RecipeManager
+        arguments:
+        - '@app.repository.recipe'
+        - '@app.service.recipe_search.query_builder'
+
+    app.repository.recipe:
+        class: App\Repository\RecipeRepository
+        arguments:
+        - '@doctrine.orm.entity_manager'

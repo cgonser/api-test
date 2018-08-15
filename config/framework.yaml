@@ -5,15 +5,23 @@ imports:
 parameters:
     routes.dir: '../config'
     routes.file: 'routes.yaml'
+    doctrine.orm.entities_path: '../src/App/Entity'
 
 services:
     kernel:
-        class: Symfony\Component\HttpKernel\HttpKernel
+        public: true
+        class: Framework\Kernel
         arguments:
         - '@kernel.event_dispatcher'
         - '@kernel.controller.controller_resolver'
         - '@http.request_stack'
         - '@kernel.controller.argument_resolver'
+        calls:
+        -   method: registerDoctrineTypes
+        -   method: enableDoctrineCache
+            arguments:
+            - '@doctrine.cache.factory'
+            - '@doctrine.orm.configuration'
 
     http.request_stack:
         class: Symfony\Component\HttpFoundation\RequestStack
@@ -52,7 +60,7 @@ services:
     kernel.controller.controller_resolver:
         class: Symfony\Component\HttpKernel\Controller\ContainerControllerResolver
         arguments:
-            - '@service_container'
+        - '@service_container'
 
     # routing
 
@@ -76,3 +84,59 @@ services:
         - '%routes.file%'
         - [ ]
         - '@routes.request_context'
+
+    # doctrine
+
+    doctrine.dbal.configuration:
+        class: Doctrine\DBAL\Configuration
+
+    doctrine.connection:
+        class: Doctrine\DBAL\Connection
+        factory: ['Doctrine\DBAL\DriverManager', getConnection]
+        arguments:
+        -   host: '%database.hostname%'
+            user: '%database.username%'
+            dbname: '%database.dbname%'
+            password: '%database.password%'
+            port: '%database.port%'
+            driver: '%database.driver%'
+        - '@doctrine.dbal.configuration'
+
+    doctrine.orm.configuration:
+        class: Doctrine\ORM\Configuration
+        factory: ['Doctrine\ORM\Tools\Setup', createAnnotationMetadataConfiguration]
+        arguments:
+        - ['%doctrine.orm.entities_path%']
+        - '%debug%'
+
+    doctrine.orm.entity_manager:
+        class: Doctrine\ORM\EntityManager
+        factory: ['Doctrine\ORM\EntityManager', create]
+        arguments:
+        - '@doctrine.connection'
+        - '@doctrine.orm.configuration'
+
+    # cache
+
+    cache.predis:
+        class: Predis\Client
+        arguments:
+            - scheme: 'tcp'
+              host: '%redis.hostname%'
+              port: '%redis.port%'
+
+    doctrine.cache.driver:
+        class: Doctrine\Common\Cache\PredisCache
+        arguments: [ '@cache.predis' ]
+
+    doctrine.cache.configuration:
+        class: Doctrine\ORM\Cache\CacheConfiguration
+
+    doctrine.cache.regions_configuration:
+        class: Doctrine\ORM\Cache\RegionsConfiguration
+
+    doctrine.cache.factory:
+        class: Doctrine\ORM\Cache\DefaultCacheFactory
+        arguments:
+        - '@doctrine.cache.regions_configuration'
+        - '@doctrine.cache.driver'
