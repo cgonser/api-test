@@ -3,10 +3,10 @@ services:
 
     # Application container
     php:
-        build: .
+#        build: .
+#        volumes:
+#            - ./:/server/http
         restart: unless-stopped
-        volumes:
-            - ./:/server/http
         ports:
             - "80:80"
             - "443:443"
@@ -15,11 +15,13 @@ services:
             - redis
         environment:
             DEBUG: 'true'
-            POSTGRES_HOSTNAME: postgres
-            POSTGRES_USER: hellofresh
-            POSTGRES_PASSWORD: hellofresh
-            POSTGRES_DB: hellofresh
-            POSTGRES_PORT: 5432
+            POSTGRESQL_HOSTNAME: postgres
+            POSTGRESQL_USER: hellofresh
+            POSTGRESQL_PASSWORD: hellofresh
+            POSTGRESQL_DB: hellofresh
+            POSTGRESQL_PORT: 5432
+            REDIS_HOSTNAME: redis
+            REDIS_PORT: 6379
 
     postgres:
         image: onjin/alpine-postgres:9.5
@@ -37,4 +39,3 @@ services:
         restart: unless-stopped
         ports:
             - "6379:6379"
-

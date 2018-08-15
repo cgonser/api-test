@@ -3,9 +3,9 @@ imports:
 - { resource: 'services.yaml' }
 
 parameters:
-    routes.config.dir: '../config'
+    routes.config.dir: '%config_dir%'
     routes.config.file: 'routes.yaml'
-    security.config.dir: '../config'
+    security.config.dir: '%config_dir%'
     security.config.file: 'security.yaml'
     doctrine.orm.entities_path: '../src/App/Entity'
 
