@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Request\RecipeCreateRequest;
 use App\Request\RecipeRatingRequest;
+use App\Request\RecipeSearchRequest;
 use App\Request\RecipeUpdateRequest;
 use App\Service\RecipeManager;
 use Framework\Controller\AbstractController;
@@ -13,6 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class RecipeController extends AbstractController
 {
+    const LIMIT_PER_PAGE = 20;
+
     /**
      * @var RecipeManager
      */
@@ -25,12 +28,23 @@ class RecipeController extends AbstractController
 
     public function listAction(Request $request): JsonResponse
     {
-        return $this->handleSuccess([]);
+        return $this->handleSuccess(
+            $this->getRecipeManager()->list(
+                $request->get('page', 1),
+                $request->get('limit', self::LIMIT_PER_PAGE)
+            )
+        );
     }
 
     public function searchAction(Request $request): JsonResponse
     {
-        return $this->handleSuccess([]);
+        return $this->handleSuccess(
+            $this->getRecipeManager()->search(
+                RecipeSearchRequest::fromRequest($request->request),
+                $request->get('page', 1),
+                $request->get('limit', self::LIMIT_PER_PAGE)
+            )
+        );
     }
 
     public function createAction(Request $request): JsonResponse

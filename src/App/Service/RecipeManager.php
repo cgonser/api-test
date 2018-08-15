@@ -3,23 +3,35 @@
 namespace App\Service;
 
 use App\Entity\Recipe;
+use App\Entity\RecipeRate;
+use App\Exception\RecipeAlreadyExistsException;
+use App\Exception\RecipeNotFoundException;
+use App\Repository\RecipeRepository;
 use App\Request\RecipeCreateRequest;
 use App\Request\RecipeRatingRequest;
+use App\Request\RecipeSearchRequest;
 use App\Request\RecipeUpdateRequest;
+use App\Service\RecipeSearch\QueryBuilder;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
 class RecipeManager
 {
-//    /**
-//     * @var RecipeRepository
-//     */
-//    private $recipeRepository;
-//
-//    public function __construct(RecipeRepository $recipeRepository)
-//    {
-//        $this->recipeRepository = $recipeRepository;
-//    }
+    /**
+     * @var RecipeRepository
+     */
+    private $recipeRepository;
+
+    /**
+     * @var QueryBuilder
+     */
+    private $recipeSearchQueryBuilder;
+
+    public function __construct(RecipeRepository $recipeRepository, QueryBuilder $recipeSearchQueryBuilder)
+    {
+        $this->recipeRepository = $recipeRepository;
+        $this->recipeSearchQueryBuilder = $recipeSearchQueryBuilder;
+    }
 
     public function createFromRequest(RecipeCreateRequest $recipeCreateRequest): Recipe
     {
@@ -35,12 +47,12 @@ class RecipeManager
             $recipeCreateRequest->vegetarian
         );
 
-        // TODO: implement persistence
+        $this->getRecipeRepository()->save($recipe);
 
         return $recipe;
     }
 
-    public function updateFromRequest(RecipeUpdateRequest $recipeUpdateRequest)
+    public function updateFromRequest(RecipeUpdateRequest $recipeUpdateRequest): Recipe
     {
         $recipe = $this->get($recipeUpdateRequest->id);
 
@@ -53,30 +65,93 @@ class RecipeManager
             $recipeUpdateRequest->vegetarian
         );
 
-        // TODO: implement persistence
+        $this->getRecipeRepository()->save($recipe);
 
         return $recipe;
     }
 
+    /**
+     * @return Recipe[]
+     */
+    public function list(int $page, int $limit = 20): array
+    {
+        return $this->getRecipeRepository()->findBy(
+            [],
+            [],
+            $limit,
+            ($limit * ($page - 1))
+        );
+    }
+
     public function get(UuidInterface $uuid): Recipe
     {
-        // TODO: implement get logic / throw exception if not found
+        $recipe = $this->getRecipeRepository()->find($uuid);
 
-        return Recipe::createWithValues($uuid, '', 0, 1, false);
+        if (!$recipe) {
+            throw new RecipeNotFoundException();
+        }
+
+        return $recipe;
     }
 
     public function delete(UuidInterface $uuid)
     {
-        // TODO: implement delete logic
+        $recipe = $this->getRecipeRepository()->find($uuid);
+
+        if (!$recipe) {
+            throw new RecipeNotFoundException();
+        }
+
+        $this->getRecipeRepository()->delete($recipe);
     }
 
     public function addRateFromRequest(RecipeRatingRequest $recipeRatingRequest)
     {
-        // TODO: implement rating logic
+        $recipe = $this->get($recipeRatingRequest->id);
+
+        $recipeRateId = Uuid::uuid4();
+
+        $recipe->addRate(RecipeRate::createWithValues(
+            $recipeRateId,
+            $recipe,
+            $recipeRatingRequest->rate
+        ));
+
+        $this->getRecipeRepository()->save($recipe);
     }
 
     protected function validateRecipeDuplicity(string $recipeName, UuidInterface $recipeId = null)
     {
-        // TODO: implement logic for checking duplicity and throw exception if needed
+        $existingRecipe = $this->getRecipeRepository()->findOneBy(['name' => $recipeName]);
+
+        if (!$existingRecipe) {
+            return;
+        }
+
+        if ($recipeId === null || (string) $existingRecipe->getId() != (string) $recipeId) {
+            throw new RecipeAlreadyExistsException();
+        }
+    }
+
+    /**
+     * @return Recipe[]
+     */
+    public function search(RecipeSearchRequest $recipeSearchRequest, int $page, int $limit): array
+    {
+        return $this->getRecipeRepository()->search(
+            $this->getRecipeSearchQueryBuilder()->buildFromRequest($recipeSearchRequest),
+            $limit,
+            ($limit * ($page - 1))
+        );
+    }
+
+    protected function getRecipeRepository(): RecipeRepository
+    {
+        return $this->recipeRepository;
+    }
+
+    protected function getRecipeSearchQueryBuilder(): QueryBuilder
+    {
+        return $this->recipeSearchQueryBuilder;
     }
 }
