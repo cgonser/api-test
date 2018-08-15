@@ -48,7 +48,7 @@ class RecipeUpdateRequest extends AbstractRequest
         return $request;
     }
 
-    protected function getConstraints()
+    protected function getConstraints(): Constraints\Collection
     {
         return new Constraints\Collection([
             'id' => new Constraints\Uuid(),
