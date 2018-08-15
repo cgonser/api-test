@@ -1,0 +1,12 @@
+secure_routes:
+    recipes_create:
+        path: ^/recipes$
+        methods: [POST]
+
+    recipes_update:
+        path: ^/recipes
+        methods: [PUT, PATCH]
+
+    recipes_delete:
+        path: ^/recipes
+        methods: [DELETE]
