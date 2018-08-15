@@ -1,0 +1,532 @@
+swagger: '2.0'
+info:
+  version: '1.0'
+  title: Hellofresh Recipe API
+  description: 'TODO: Add Description'
+host: 127.0.0.1
+basePath: /
+securityDefinitions:
+  auth:
+    type: basic
+    x-testValue: []
+    x-skip-client-authentication: false
+schemes:
+- http
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /recipes:
+    get:
+      description: 'TODO: Add Description'
+      summary: List
+      tags:
+      - Misc
+      operationId: RecipesGet
+      produces:
+      - application/json
+      parameters:
+      - name: limit
+        in: query
+        required: true
+        type: integer
+        format: int32
+        description: ''
+      - name: page
+        in: query
+        required: true
+        type: integer
+        format: int32
+        description: ''
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: GET
+          uri: /recipes?limit=10&page=1
+          headers:
+            Content-Type: application/json
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: List
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+    post:
+      description: 'TODO: Add Description'
+      summary: Create
+      tags:
+      - Misc
+      operationId: RecipesPost
+      produces:
+      - application/json
+      parameters:
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/CreateRequest'
+      responses:
+        200:
+          description: ''
+      security:
+      - auth: []
+      x-unitTests:
+      - request:
+          method: POST
+          uri: /recipes
+          headers:
+            Content-Type: application/json
+          body: '{"name":"Rice","prep_time":10,"difficulty":1,"vegetarian":false}'
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: Create
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /recipes/search:
+    post:
+      description: 'TODO: Add Description'
+      summary: Search
+      tags:
+      - Misc
+      operationId: RecipesSearchPost
+      produces:
+      - application/json
+      parameters:
+      - name: limit
+        in: query
+        required: true
+        type: integer
+        format: int32
+        description: ''
+      - name: page
+        in: query
+        required: true
+        type: integer
+        format: int32
+        description: ''
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/SearchRequest'
+      responses:
+        200:
+          description: ''
+      security: []
+      x-unitTests:
+      - request:
+          method: POST
+          uri: /recipes/search?limit=10&page=1
+          headers:
+            Content-Type: application/json
+          body: '{"prep_time_min":5,"prep_time_max":15,"difficulty_min":1,"difficulty_max":5,"rate_min":1,"rate_max":5,"vegetarian":true}'
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: Search
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /recipes/46689e53-6518-4e11-942d-87cc6bf4ffa4:
+    put:
+      description: 'TODO: Add Description'
+      summary: Update
+      tags:
+      - Misc
+      operationId: Recipes46689e5365184e11942d87cc6bf4ffa4Put
+      produces:
+      - application/json
+      parameters:
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/UpdateRequest'
+      responses:
+        200:
+          description: ''
+      security:
+      - auth: []
+      x-unitTests:
+      - request:
+          method: PUT
+          uri: /recipes/46689e53-6518-4e11-942d-87cc6bf4ffa4
+          headers:
+            Content-Type: application/json
+          body: '{"name":"Rice and Beans","prep_time":15,"difficulty":2,"vegetarian":true}'
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: Update
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+    delete:
+      description: 'TODO: Add Description'
+      summary: Delete
+      tags:
+      - Misc
+      operationId: Recipes46689e5365184e11942d87cc6bf4ffa4Delete
+      produces:
+      - application/json
+      parameters:
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/DeleteRequest'
+      responses:
+        200:
+          description: ''
+      security:
+      - auth: []
+      x-unitTests:
+      - request:
+          method: DELETE
+          uri: /recipes/46689e53-6518-4e11-942d-87cc6bf4ffa4
+          headers:
+            Content-Type: application/json
+          body: '{"name":"Rice and Beans","prep_time":15,"difficulty":2,"vegetarian":true}'
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: Delete
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /recipes/46689e53-6518-4e11-942d-87cc6bf4ffa4/rating:
+    post:
+      description: 'TODO: Add Description'
+      summary: Rate
+      tags:
+      - Misc
+      operationId: Recipes46689e5365184e11942d87cc6bf4ffa4RatingPost
+      produces:
+      - application/json
+      parameters:
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/RateRequest'
+      responses:
+        200:
+          description: ''
+      security:
+      - auth: []
+      x-unitTests:
+      - request:
+          method: POST
+          uri: /recipes/46689e53-6518-4e11-942d-87cc6bf4ffa4/rating
+          headers:
+            Content-Type: application/json
+          body: '{"rate":3}'
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: Rate
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /recipes/de762b06-7c65-46b9-acaa-438b555a2deb:
+    get:
+      description: 'TODO: Add Description'
+      summary: Get
+      tags:
+      - Misc
+      operationId: RecipesDe762b067c6546b9Acaa438b555a2debGet
+      produces:
+      - application/json
+      parameters:
+      - name: Content-Type
+        in: header
+        required: true
+        type: string
+        description: ''
+      responses:
+        200:
+          description: ''
+      security:
+      - auth: []
+      x-unitTests:
+      - request:
+          method: GET
+          uri: /recipes/de762b06-7c65-46b9-acaa-438b555a2deb
+          headers:
+            Content-Type: ''
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: NONE
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: Get
+        x-testDescription: 'TODO: Add Description'
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+definitions:
+  SearchRequest:
+    title: SearchRequest
+    example:
+      prep_time_min: 5
+      prep_time_max: 15
+      difficulty_min: 1
+      difficulty_max: 5
+      rate_min: 1
+      rate_max: 5
+      vegetarian: true
+    type: object
+    properties:
+      prep_time_min:
+        description: ''
+        example: 5
+        type: integer
+        format: int32
+      prep_time_max:
+        description: ''
+        example: 15
+        type: integer
+        format: int32
+      difficulty_min:
+        description: ''
+        example: 1
+        type: integer
+        format: int32
+      difficulty_max:
+        description: ''
+        example: 5
+        type: integer
+        format: int32
+      rate_min:
+        description: ''
+        example: 1
+        type: integer
+        format: int32
+      rate_max:
+        description: ''
+        example: 5
+        type: integer
+        format: int32
+      vegetarian:
+        description: ''
+        example: true
+        type: boolean
+    optional:
+    - prep_time_min
+    - prep_time_max
+    - difficulty_min
+    - difficulty_max
+    - rate_min
+    - rate_max
+    - vegetarian
+  CreateRequest:
+    title: CreateRequest
+    example:
+      name: Rice
+      prep_time: 10
+      difficulty: 1
+      vegetarian: false
+    type: object
+    properties:
+      name:
+        description: ''
+        example: Rice
+        type: string
+      prep_time:
+        description: ''
+        example: 10
+        type: integer
+        format: int32
+      difficulty:
+        description: ''
+        example: 1
+        type: integer
+        format: int32
+      vegetarian:
+        description: ''
+        example: false
+        type: boolean
+    required:
+    - name
+    - prep_time
+    - difficulty
+    - vegetarian
+  UpdateRequest:
+    title: UpdateRequest
+    example:
+      name: Rice and Beans
+      prep_time: 15
+      difficulty: 2
+      vegetarian: true
+    type: object
+    properties:
+      name:
+        description: ''
+        example: Rice and Beans
+        type: string
+      prep_time:
+        description: ''
+        example: 15
+        type: integer
+        format: int32
+      difficulty:
+        description: ''
+        example: 2
+        type: integer
+        format: int32
+      vegetarian:
+        description: ''
+        example: true
+        type: boolean
+    required:
+    - name
+    - prep_time
+    - difficulty
+    - vegetarian
+  RateRequest:
+    title: RateRequest
+    example:
+      rate: 3
+    type: object
+    properties:
+      rate:
+        description: ''
+        example: 3
+        type: integer
+        format: int32
+    required:
+    - rate
+  DeleteRequest:
+    title: DeleteRequest
+    example:
+      name: Rice and Beans
+      prep_time: 15
+      difficulty: 2
+      vegetarian: true
+    type: object
+    properties:
+      name:
+        description: ''
+        example: Rice and Beans
+        type: string
+      prep_time:
+        description: ''
+        example: 15
+        type: integer
+        format: int32
+      difficulty:
+        description: ''
+        example: 2
+        type: integer
+        format: int32
+      vegetarian:
+        description: ''
+        example: true
+        type: boolean
+    required:
+    - name
+    - prep_time
+    - difficulty
+    - vegetarian
